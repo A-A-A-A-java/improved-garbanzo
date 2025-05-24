@@ -7,26 +7,23 @@ const { OpenAI } = require('openai');
 const app = express();
 const port = process.env.PORT || 3000;
 
-// Initialize OpenAI client with your secret key
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
-// Middleware
 app.use(cors());
 app.use(bodyParser.json());
-app.use(express.static('public')); // Serve frontend from /public folder
+app.use(express.static('public'));
 
-// API endpoint for chatting
 app.post('/chat', async (req, res) => {
   const userMessage = req.body.message;
 
- const completion = await openai.chat.completions.create({
-  model: 'gpt-3.5-turbo',
-  messages: [
-    { role: 'system', content: 'You are a helpful assistant.' },
-    { role: 'user', content: userMessage }
-  ]
-});
-
+  try {
+    const completion = await openai.chat.completions.create({
+      model: 'gpt-3.5-turbo',
+      messages: [
+        { role: 'system', content: 'You are a helpful assistant.' },
+        { role: 'user', content: userMessage }
+      ]
+    });
 
     const botReply = completion.choices[0].message.content;
     res.json({ reply: botReply });
@@ -37,7 +34,6 @@ app.post('/chat', async (req, res) => {
   }
 });
 
-// Start server
 app.listen(port, () => {
-  console.log(`Server is running at http://localhost:${port}`);
+  console.log(`Server is running on http://localhost:${port}`);
 });
