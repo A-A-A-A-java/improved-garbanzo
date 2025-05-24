@@ -19,14 +19,14 @@ app.use(express.static('public')); // Serve frontend from /public folder
 app.post('/chat', async (req, res) => {
   const userMessage = req.body.message;
 
-  try {
-    const completion = await openai.chat.completions.create({
-      model: 'gpt-3.5-turbo'
-      messages: [
-        { role: 'system', content: 'You are a helpful assistant.' },
-        { role: 'user', content: userMessage }
-      ]
-    });
+ const completion = await openai.chat.completions.create({
+  model: 'gpt-3.5-turbo',
+  messages: [
+    { role: 'system', content: 'You are a helpful assistant.' },
+    { role: 'user', content: userMessage }
+  ]
+});
+
 
     const botReply = completion.choices[0].message.content;
     res.json({ reply: botReply });
